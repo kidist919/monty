@@ -1,17 +1,29 @@
-#ifndef MONTY_H_
-#define MONTY_H_
-
-#define UN __attribute__((__unused__))
-
-/* Standard Libraries */
+#ifndef _MONTY_H_
+#define _MONTY_H_
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <unistd.h>
-
 #include <string.h>
 
-/* Structs and Lists */
+/**
+ * struct global_var - variable to use buffer, file descriptor, and mode
+ * @buffer: buffer to store getline of opcode
+ * @mode: mode to represent stack or queue
+ * @fp: file descriptor for our file
+ *
+ * Descritpion: allows for use and free of certain variables used
+ * in stack, queues, LIFO, FIFO Holberton project
+ */
+struct global_var
+{
+	char *buffer;
+	int mode;
+	FILE *fp;
+};
+
+extern struct global_var glo;
 
 /**
  * struct stack_s - doubly linked list representation of a stack (or queue)
@@ -43,60 +55,41 @@ typedef struct instruction_s
 	void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-/**
- * struct list_s - linked list of struct instruction
- * @n: number of line
- * @inst: instruction of opcode and its function
- * @next: points to the next element of the linked list
- * Description: Single linked list of the struct instruction
- */
-typedef struct list_s
-{
-	int n;
-	char *inst;
-	struct list_s *next;
-} list_t;
+/* monty.c functions */
+int open_file(char *);
+unsigned int line_iterate(unsigned int);
+void opcode(stack_t **, unsigned int);
 
-extern list_t *list_opcode;
+/* memory.c functions */
+stack_t *malloc_stack(stack_t *);
+void free_stack(stack_t *);
+void memory_clear(stack_t *);
 
-/* Prototype Functions */
+/* opbasic.c functions */
+void push(stack_t **, unsigned int);
+void pall(stack_t **, unsigned int);
+void pint(stack_t **, unsigned int);
+void pop(stack_t **, unsigned int);
+void nop(stack_t **, unsigned int);
 
-int get_file(char *str);
-void check_file(char *str);
-list_t *create_instruction(list_t **head, char *str, int n, FILE *fp);
-void (*ptr_opcode(list_t *head))(stack_t **stack, unsigned int line_number);
-char *_strdup(char *str, FILE *fp);
-int _strlen(char *str);
-int clean_string(char *buff, char *str);
-void free_list_opcode(list_t *head);
-void *_calloc(unsigned int nmemb, unsigned int size);
-void push(stack_t **stack, unsigned int line_number);
-void pall(stack_t **stack, unsigned int line_number);
-void nothing(stack_t **stack, unsigned int line_number);
-int cmp_inst(char *str1, char *str);
-stack_t *add_nodeint(stack_t **head, const int n);
-void free_all(list_t *list_opcode, stack_t *stack);
-void free_list_stack(stack_t *head);
-void swap(stack_t **stack, UN unsigned int line_number);
-void pint(stack_t **stack, unsigned int line_number);
-int stack_len(stack_t *head);
-void pop(stack_t **stack, unsigned int line_number);
-void add(stack_t **stack, unsigned int line_number);
-void nop(UN stack_t **stack, UN unsigned int line_number);
-void sub(stack_t **stack, unsigned int line_number);
-int check_arg(char *buff);
-int cpy_arg(list_t *t, char *buff);
-void print_error_push(stack_t **stack, int line_number);
-void _div(stack_t **stack, unsigned int line_number);
-void _mul(stack_t **stack, unsigned int line_number);
-void _mod(stack_t **stack, unsigned int line_number);
-stack_t *add_dnodeint_end(stack_t **head, const int n);
-void core_stack_queue(stack_t **stack, unsigned int line_number, int sq);
-void queue(stack_t **stack, unsigned int line_number);
-void stack(stack_t **stack, unsigned int line_number);
-void pchar(stack_t **stack, unsigned int line_number);
-void pstr(stack_t **stack, UN unsigned int line_number);
-void rotl(stack_t **stack, UN unsigned int line_number);
-void rotr(stack_t **stack, UN unsigned int line_number);
+/* opmore.c functions */
+void swap(stack_t **, unsigned int);
+void add(stack_t **, unsigned int);
+void sub(stack_t **, unsigned int);
+void divi(stack_t **, unsigned int);
+void mul(stack_t **, unsigned int);
 
-#endif /* MONTY_H_ */
+/* opthree.c functions */
+void mod(stack_t **, unsigned int);
+void pchar(stack_t **, unsigned int);
+void pstr(stack_t **, unsigned int);
+void rotl(stack_t **, unsigned int);
+void stoq(stack_t **, unsigned int);
+
+/* opfour.c functions */
+void rotr(stack_t **, unsigned int);
+void stac(stack_t **, unsigned int);
+void queue(stack_t **, unsigned int);
+void push_help(stack_t **, stack_t *);
+
+#endif /*_MONTY_H_*/
